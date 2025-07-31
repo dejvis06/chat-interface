@@ -1,1 +1,47 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: Arial, sans-serif; /* or any default font */
+}
+
 /* You can add global styles to this file, and also import other style files */
+.gradient-custom {
+  min-height: 100vh; /* cover full screen */
+  display: flex;
+  justify-content: center; /* centers horizontally */
+  align-items: center; /* centers vertically */
+  flex-direction: column; /* stack items vertically */
+
+  min-height: 100vh; /* full viewport height */
+  /* fallback for old browsers */
+  background: #0a0a2a; /* deep navy fallback */
+
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: -webkit-linear-gradient(
+    to right,
+    #000000,
+    #0a0a2a,
+    #1a1a6b,
+    #2e2ebd
+  );
+
+  /* Modern browsers */
+  background: linear-gradient(to right, #000000, #0a0a2a, #1a1a6b, #2e2ebd);
+}
+
+.mask-custom {
+  background: rgba(85, 37, 166, 0.85); /* cooler indigo-violet */
+  border-radius: 2em;
+  backdrop-filter: blur(15px);
+  border: 2px solid rgba(255, 255, 255, 0.05);
+  background-clip: padding-box;
+  box-shadow: 10px 10px 10px rgba(46, 54, 68, 0.03);
+}
+
+p {
+  color: white;
+}
