@@ -1,6 +1,6 @@
 import { Component, ElementRef, NgZone, ViewChild } from '@angular/core';
-import { AiResponseComponent } from '../ai-response/ai-response.component';
-import { UserPromptComponent } from '../user-prompt/user-prompt.component';
+import { AiResponseComponent } from './ai-response/ai-response.component';
+import { UserPromptComponent } from './user-prompt/user-prompt.component';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
