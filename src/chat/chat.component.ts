@@ -1,4 +1,4 @@
-import { Component, NgZone } from '@angular/core';
+import { Component, ElementRef, NgZone, ViewChild } from '@angular/core';
 import { AiResponseComponent } from '../ai-response/ai-response.component';
 import { UserPromptComponent } from '../user-prompt/user-prompt.component';
 import { CommonModule } from '@angular/common';
@@ -21,12 +21,14 @@ interface ChatMessage {
   styleUrls: ['./chat.component.scss'],
 })
 export class ChatComponent {
+  @ViewChild('messagesList') private messagesList!: ElementRef;
+
   userMessage: string = '';
   messages: ChatMessage[] = [];
 
-  constructor(private ngZone: NgZone) {}
-
   messageControl = new FormControl('');
+
+  constructor(private ngZone: NgZone) {}
 
   sendMessage() {
     const userText = this.messageControl.value?.trim();
@@ -52,6 +54,7 @@ export class ChatComponent {
       // Forces the code inside to run in Angular's zone, ensuring change detection updates the UI immediately.
       this.ngZone.run(() => {
         this.messages[aiIndex].content += event.data;
+        this.scrollToBottom();
       });
     };
 
@@ -66,5 +69,14 @@ export class ChatComponent {
 
     //  Clear textarea after sending
     this.messageControl.reset();
+  }
+
+  private scrollToBottom(): void {
+    try {
+      this.messagesList.nativeElement.scrollTop =
+        this.messagesList.nativeElement.scrollHeight;
+    } catch (err) {
+      console.error('Scroll failed', err);
+    }
   }
 }
