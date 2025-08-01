@@ -17,16 +17,15 @@ export interface ChatListItem {
 export class ChatsComponent {
   chats: ChatListItem[] = [
     {
-      name: 'John Doe',
-      lastMessage: 'Hello, Are you there?',
-      timestamp: 'Just now',
-      unreadCount: 1,
+      name: 'Redis Master–Replica Drawbacks',
+      lastMessage: 'Explored failover scenarios and retry logic.',
+      timestamp: '5 mins ago',
     },
     {
-      name: 'Danny Smith',
-      lastMessage: 'Lorem ipsum dolor sit.',
-      timestamp: '5 mins ago',
-      // no unreadCount here (badge won’t show)
+      name: 'Spring AI SSE Streaming',
+      lastMessage: 'Compared Flux vs SSE for browser UI.',
+      timestamp: '20 mins ago',
+      unreadCount: 3,
     },
   ];
 }
