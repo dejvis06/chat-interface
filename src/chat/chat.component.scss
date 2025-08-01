@@ -1,0 +1,19 @@
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 70vh; /* full screen height */
+  padding: 10px;
+}
+
+.messages {
+  flex: 1; /* takes remaining space */
+  overflow-y: auto; /* scroll if messages overflow */
+  margin: 0;
+  padding: 0;
+}
+
+.input-section {
+  position: sticky;
+  bottom: 0;
+  padding-top: 10px;
+}
