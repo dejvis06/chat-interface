@@ -27,21 +27,6 @@ export class ChatComponent {
   constructor(private ngZone: NgZone) {}
 
   messageControl = new FormControl('');
-  /*   sendMessage() {
-    if (!this.userMessage.trim()) return;
-
-    //  Push user message
-    this.messages.push({ role: 'user', content: this.userMessage });
-
-    //  Push mock AI reply (for now)
-    this.messages.push({
-      role: 'ai',
-      content: '⚓ Mock AI reply to: ' + this.userMessage,
-    });
-
-    //  Clear the input
-    this.userMessage = '';
-  } */
 
   sendMessage() {
     const userText = this.messageControl.value?.trim();
