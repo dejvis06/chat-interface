@@ -1,9 +1,16 @@
 <li class="d-flex justify-content-between mb-4">
   <div class="card mask-custom w-100">
     <div class="card-body">
+      <!-- ✅ show progressively typed text -->
       <p class="mb-0">
-        {{ response }}
-        <span *ngIf="loading" class="dots">...</span>
+        <span
+          *ngIf="loading"
+          class="spinner-border spinner-border-sm text-light ms-2"
+          role="status"
+        >
+          <span class="visually-hidden">Loading...</span>
+        </span>
+        {{ displayedText }}
       </p>
     </div>
   </div>

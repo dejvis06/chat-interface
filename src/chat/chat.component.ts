@@ -22,7 +22,6 @@ interface ChatMessage {
 })
 export class ChatComponent {
   userMessage: string = '';
-  isStreaming: boolean = false;
   messages: ChatMessage[] = [];
 
   constructor(private ngZone: NgZone) {}
@@ -62,25 +61,22 @@ export class ChatComponent {
       )}`
     );
 
-    this.isStreaming = true;
+    this.messages[aiIndex].content += ''; // initiate chat
 
     eventSource.onmessage = (event) => {
-      //  Wrap UI update in NgZone so Angular knows about it
+      // Forces the code inside to run in Angular's zone, ensuring change detection updates the UI immediately.
       this.ngZone.run(() => {
         this.messages[aiIndex].content += event.data;
-        console.log('Updated AI content:', this.messages[aiIndex].content);
       });
     };
 
     eventSource.onerror = (error) => {
       console.error('SSE error');
       eventSource.close();
-      this.isStreaming = false;
     };
 
     eventSource.addEventListener('end', () => {
       eventSource.close();
-      this.isStreaming = false;
     });
 
     //  Clear textarea after sending
