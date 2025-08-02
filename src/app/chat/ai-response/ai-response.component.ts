@@ -56,6 +56,6 @@ export class AiResponseComponent implements OnChanges {
         clearInterval(this.typingTimer);
         this.typingTimer = null;
       }
-    }, 10); // typing speed
+    }, 25); // typing speed
   }
 }

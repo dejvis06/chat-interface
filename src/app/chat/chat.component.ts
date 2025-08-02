@@ -43,7 +43,7 @@ export class ChatComponent {
 
     //  SSE connection
     const eventSource = new EventSource(
-      `http://localhost:8080/mock/chat/stream?message=${encodeURIComponent(
+      `http://localhost:8080/chat/stream?message=${encodeURIComponent(
         userText
       )}`
     );
@@ -51,9 +51,9 @@ export class ChatComponent {
     this.messages[aiIndex].content += ''; // initiate chat
 
     eventSource.onmessage = (event) => {
-      // Forces the code inside to run in Angular's zone, ensuring change detection updates the UI immediately.
       this.ngZone.run(() => {
-        this.messages[aiIndex].content += event.data;
+        const parsed = JSON.parse(event.data);
+        this.messages[aiIndex].content += parsed.text;
         this.scrollToBottom();
       });
     };
