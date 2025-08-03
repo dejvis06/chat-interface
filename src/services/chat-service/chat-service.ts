@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ChatListItem } from '../../app/components/chats/chats.component';
+import { ChatDto } from '../../app/components/chat/chat.component';
 
 const API_BASE_URL = 'http://localhost:8080';
 const CHATS_ENDPOINT = `${API_BASE_URL}/chats`;
@@ -30,5 +31,14 @@ export class ChatService {
     return this.http.get<any>(
       `${CHATS_ENDPOINT}/${chatId}/messages?page=${page}&size=${size}`
     );
+  }
+
+  /**
+   * Creates and persists a new Chat based on the provided user message.
+   */
+  createChat(userPrompt: string) {
+    return this.http.post<ChatDto>(`${CHATS_ENDPOINT}`, null, {
+      params: { userPrompt },
+    });
   }
 }

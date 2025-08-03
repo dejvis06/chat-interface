@@ -1,9 +1,18 @@
-import { Component, ElementRef, Input, NgZone, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  NgZone,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { AiResponseComponent } from './ai-response/ai-response.component';
 import { UserPromptComponent } from './user-prompt/user-prompt.component';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { ChatService } from '../../../services/chat-service/chat-service';
 
 interface ChatMessage {
   role: 'user' | 'ai';
@@ -41,7 +50,9 @@ export class ChatComponent {
 
   messageControl = new FormControl('');
 
-  constructor(private http: HttpClient, private ngZone: NgZone) {}
+  @Output() chatCreated = new EventEmitter<ChatDto>();
+
+  constructor(private chatService: ChatService, private ngZone: NgZone) {}
 
   sendMessage() {
     const userText = this.messageControl.value?.trim();
@@ -58,17 +69,14 @@ export class ChatComponent {
 
     // Case 1: If no chatId yet -> create chat first
     if (!this.chatId) {
-      this.http
-        .post<ChatDto>('http://localhost:8080/chats', null, {
-          params: { userPrompt: userText },
-        })
-        .subscribe((chat) => {
-          this.chatId = chat.id; // store chatId for all future SSE calls
-          this.openSseConnection(userText, aiIndex);
-        });
+      this.chatService.createChat(userText).subscribe((chat) => {
+        this.chatCreated.emit(chat); // Emit new chat to AppComponent
 
-      // Case 2: Chat already exists -> just stream
+        this.chatId = chat.id; // store chatId for all future SSE calls
+        this.openSseConnection(userText, aiIndex);
+      });
     } else {
+      // Chat already exists -> just stream
       this.openSseConnection(userText, aiIndex);
     }
 

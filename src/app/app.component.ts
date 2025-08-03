@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ChatsComponent } from './components/chats/chats.component';
-import { ChatComponent } from './components/chat/chat.component';
+import { ChatComponent, ChatDto } from './components/chat/chat.component';
 
 @Component({
   selector: 'app-root',
@@ -10,4 +10,11 @@ import { ChatComponent } from './components/chat/chat.component';
 })
 export class AppComponent {
   title = 'chat-AI';
+
+  createdChat?: ChatDto;
+
+  // Called when ChatComponent emits a new chat
+  onChatCreated(chat: ChatDto) {
+    this.createdChat = chat;
+  }
 }
