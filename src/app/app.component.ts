@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { ChatsComponent } from './chats/chats.component';
-import { ChatComponent } from './chat/chat.component';
+import { ChatsComponent } from './components/chats/chats.component';
+import { ChatComponent } from './components/chat/chat.component';
 
 @Component({
   selector: 'app-root',

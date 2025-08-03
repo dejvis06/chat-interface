@@ -1,0 +1,18 @@
+<h5 class="font-weight-bold mb-3 text-center text-white">Chats</h5>
+
+<div class="card mask-custom">
+  <div class="card-body">
+    <div class="no-chats" *ngIf="chats.length === 0">
+      <p>Start a new conversation 💬</p>
+    </div>
+    <ul class="list-unstyled mb-0">
+      <li
+        *ngFor="let chat of chats"
+        class="p-2 border-bottom"
+        style="border-bottom: 1px solid rgba(255, 255, 255, 0.3) !important"
+      >
+        <app-chat-list-item />
+      </li>
+    </ul>
+  </div>
+</div>

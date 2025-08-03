@@ -1,0 +1,11 @@
+<a *ngIf="chat" href="#!" class="d-flex justify-content-between link-light">
+  <div class="d-flex flex-row">
+    <div class="pt-1">
+      <p class="fw-bold mb-0">{{ chat.name }}</p>
+      <p class="small text-white">{{ chat.lastMessage }}</p>
+    </div>
+  </div>
+  <div class="pt-1">
+    <p class="small text-white mb-1">{{ chat.timestamp }}</p>
+  </div>
+</a>
