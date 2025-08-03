@@ -7,6 +7,7 @@ import { ChatDto } from '../chat/chat.component';
 import { timestamp } from 'rxjs';
 
 export interface ChatListItem {
+  id: string;
   name: string;
   lastMessage: string;
   createdAt: string;
@@ -34,6 +35,7 @@ export class ChatsComponent implements OnChanges, OnInit {
     // When a new chat is emitted, add it to the list
     if (this.chat) {
       const chatListItem: ChatListItem = {
+        id: this.chat.id,
         name: this.chat.name,
         createdAt: this.chat.createdAt,
         lastMessage: '',
@@ -56,5 +58,10 @@ export class ChatsComponent implements OnChanges, OnInit {
         console.error('Error loading chats', err);
       },
     });
+  }
+
+  selectedChatId?: string;
+  onChatClick(chatId: string) {
+    this.selectedChatId = chatId;
   }
 }

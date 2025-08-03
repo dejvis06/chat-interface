@@ -16,7 +16,11 @@
         class="p-2 border-bottom"
         style="border-bottom: 1px solid rgba(255, 255, 255, 0.3) !important"
       >
-        <app-chat-list-item [chat]="chat" />
+        <app-chat-list-item
+          [chat]="chat"
+          (chatClicked)="onChatClick($event)"
+          [selectedChatId]="selectedChatId"
+        />
       </li>
     </ul>
   </div>

@@ -4,6 +4,7 @@ import {
   EventEmitter,
   Input,
   NgZone,
+  OnInit,
   Output,
   ViewChild,
 } from '@angular/core';
@@ -13,11 +14,7 @@ import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { ChatService } from '../../../services/chat-service/chat-service';
-
-interface ChatMessage {
-  role: 'user' | 'ai';
-  content: string;
-}
+import { ChatStateService } from '../../../services/chat-state-service';
 
 export interface ChatDto {
   id: string;
@@ -42,17 +39,29 @@ export interface ChatMessageDto {
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss'],
 })
-export class ChatComponent {
+export class ChatComponent implements OnInit {
   @Input() chatId?: String;
 
   userMessage: string = '';
-  messages: ChatMessage[] = [];
+  messages: ChatMessageDto[] = [];
 
   messageControl = new FormControl('');
 
   @Output() chatCreated = new EventEmitter<ChatDto>();
 
-  constructor(private chatService: ChatService, private ngZone: NgZone) {}
+  constructor(
+    private chatService: ChatService,
+    private ngZone: NgZone,
+    private chatStateService: ChatStateService
+  ) {}
+
+  ngOnInit(): void {
+    this.chatStateService.messages$.subscribe((chatDto) => {
+      this.chatId = chatDto!.id;
+      this.messages = chatDto!.messages;
+      this.scrollToBottom();
+    });
+  }
 
   sendMessage() {
     const userText = this.messageControl.value?.trim();
@@ -63,7 +72,7 @@ export class ChatComponent {
 
     //  Add placeholder AI response
     const aiIndex = this.messages.length;
-    this.messages.push({ role: 'ai', content: '' });
+    this.messages.push({ role: 'assistant', content: '' });
 
     this.messages[aiIndex].content += ''; // initiate chat
 

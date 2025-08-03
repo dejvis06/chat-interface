@@ -2,7 +2,10 @@
   <ul #messagesList class="list-unstyled text-white messages">
     <ng-container *ngFor="let msg of messages">
       <app-user-prompt *ngIf="msg.role === 'user'" [message]="msg.content" />
-      <app-ai-response *ngIf="msg.role === 'ai'" [response]="msg.content" />
+      <app-ai-response
+        *ngIf="msg.role === 'assistant'"
+        [response]="msg.content"
+      />
     </ng-container>
   </ul>
 

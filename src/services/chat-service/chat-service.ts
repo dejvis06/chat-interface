@@ -2,7 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ChatListItem } from '../../app/components/chats/chats.component';
-import { ChatDto } from '../../app/components/chat/chat.component';
+import {
+  ChatDto,
+  ChatMessageDto,
+} from '../../app/components/chat/chat.component';
 
 const API_BASE_URL = 'http://localhost:8080';
 const CHATS_ENDPOINT = `${API_BASE_URL}/chats`;
@@ -28,7 +31,7 @@ export class ChatService {
     page: number = 0,
     size: number = 10
   ): Observable<any> {
-    return this.http.get<any>(
+    return this.http.get<ChatMessageDto>(
       `${CHATS_ENDPOINT}/${chatId}/messages?page=${page}&size=${size}`
     );
   }
