@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 
 export interface ChatListItem {
   name: string; // e.g. "John Doe"
@@ -15,17 +15,14 @@ export interface ChatListItem {
   styleUrl: './chats.component.scss',
 })
 export class ChatsComponent {
-  chats: ChatListItem[] = [
-    {
-      name: 'Redis Master–Replica Drawbacks',
-      lastMessage: 'Explored failover scenarios and retry logic.',
-      timestamp: '5 mins ago',
-    },
-    {
-      name: 'Spring AI SSE Streaming',
-      lastMessage: 'Compared Flux vs SSE for browser UI.',
-      timestamp: '20 mins ago',
-      unreadCount: 3,
-    },
-  ];
+  chats: ChatListItem[] = [];
+
+  ngOnInit() {
+    //  SSE connection
+    /* const eventSource = new EventSource(
+      `http://localhost:8080/chat/stream?message=${encodeURIComponent('')}`
+    );
+ */
+    // eventSource.onmessage = (event) => {};
+  }
 }
