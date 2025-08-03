@@ -50,7 +50,7 @@ export class ChatsComponent implements OnChanges, OnInit {
           this.chats = data;
           console.log('Chats loaded:', this.chats);
           this.loading = false;
-        }, 2000);
+        }, 500);
       },
       error: (err) => {
         console.error('Error loading chats', err);
