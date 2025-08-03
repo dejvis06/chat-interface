@@ -5,6 +5,7 @@
       <app-ai-response
         *ngIf="msg.role === 'assistant'"
         [response]="msg.content"
+        [typingEffect]="typingEffect"
       />
     </ng-container>
   </ul>

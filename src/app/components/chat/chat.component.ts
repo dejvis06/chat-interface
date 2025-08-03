@@ -45,6 +45,8 @@ export class ChatComponent implements OnInit {
   userMessage: string = '';
   messages: ChatMessageDto[] = [];
 
+  typingEffect = true;
+
   messageControl = new FormControl('');
 
   @Output() chatCreated = new EventEmitter<ChatDto>();
@@ -57,6 +59,7 @@ export class ChatComponent implements OnInit {
 
   ngOnInit(): void {
     this.chatStateService.messages$.subscribe((chatDto) => {
+      this.typingEffect = false;
       this.chatId = chatDto!.id;
       this.messages = chatDto!.messages;
       this.scrollToBottom();
@@ -64,6 +67,8 @@ export class ChatComponent implements OnInit {
   }
 
   sendMessage() {
+    this.typingEffect = true;
+
     const userText = this.messageControl.value?.trim();
     if (!userText) return;
 

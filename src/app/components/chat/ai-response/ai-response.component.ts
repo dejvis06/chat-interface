@@ -12,6 +12,7 @@ export class AiResponseComponent implements OnChanges {
   @Input() response: string = '';
   @Input() loading: boolean = true;
 
+  @Input() typingEffect: boolean = true;
   private fullText = '';
   displayedText: string = '';
   private lastLength = 0;
@@ -29,16 +30,25 @@ export class AiResponseComponent implements OnChanges {
       this.lastLength = this.response.length;
 
       // Start typing only once
-      if (!this.typingTimer) {
-        this.startTypingEffect();
-      }
+      this.handleTextDisplay();
+    }
+  }
+
+  /**
+   * Decide which display mode to use
+   */
+  public handleTextDisplay() {
+    if (!this.typingTimer && this.typingEffect) {
+      this.startTypingEffect();
+    } else if (!this.typingEffect) {
+      this.showFullTextImmediately();
     }
   }
 
   /**
    * Gradually types out the accumulated `fullText` into `displayedText`.
    *
-   * - Uses a 20ms interval to reveal one additional character at a time.
+   * - Uses a 10ms interval to reveal one additional character at a time.
    * - Continues typing until `displayedText` catches up with `fullText`.
    * - Automatically stops and clears the timer once all text is displayed,
    *   setting `typingTimer` to null so typing can resume if new text arrives.
@@ -56,6 +66,19 @@ export class AiResponseComponent implements OnChanges {
         clearInterval(this.typingTimer);
         this.typingTimer = null;
       }
-    }, 25); // typing speed
+    }, 10); // typing speed
+  }
+
+  /**
+   *  Immediately show the entire text, no typing effect
+   */
+  private showFullTextImmediately() {
+    this.displayedText = this.fullText;
+
+    // Just in case, clear any running typing timers
+    if (this.typingTimer) {
+      clearInterval(this.typingTimer);
+      this.typingTimer = null;
+    }
   }
 }
