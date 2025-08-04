@@ -10,4 +10,8 @@ export class ChatStateService {
   setMessages(chatDto: ChatDto) {
     this.messagesSubject.next(chatDto);
   }
+
+  resetMessages() {
+    this.messagesSubject.next(null);
+  }
 }

@@ -1,10 +1,19 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, NgZone, OnChanges, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  NgZone,
+  OnChanges,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { ChatListItemComponent } from './chat-list-item/chat-list-item.component';
 import { HttpClient } from '@angular/common/http';
 import { ChatService } from '../../../services/chat-service/chat-service';
 import { ChatDto } from '../chat/chat.component';
 import { timestamp } from 'rxjs';
+import { ChatStateService } from '../../../services/chat-state-service';
 
 export interface ChatListItem {
   id: string;
@@ -25,7 +34,10 @@ export class ChatsComponent implements OnChanges, OnInit {
 
   @Input() chat?: ChatDto;
 
-  constructor(private chatService: ChatService) {}
+  constructor(
+    private chatService: ChatService,
+    private chatStateService: ChatStateService
+  ) {}
 
   ngOnInit() {
     this.loadChats();
@@ -42,6 +54,12 @@ export class ChatsComponent implements OnChanges, OnInit {
       };
       this.chats.unshift(chatListItem);
     }
+    this.chatStateService.messages$.subscribe((chatDto) => {
+      if (!chatDto) {
+        // Reset selected chat
+        this.selectedChatId = null;
+      }
+    });
   }
 
   loadChats() {
@@ -50,7 +68,6 @@ export class ChatsComponent implements OnChanges, OnInit {
       next: (data) => {
         setTimeout(() => {
           this.chats = data;
-          console.log('Chats loaded:', this.chats);
           this.loading = false;
         }, 500);
       },
@@ -60,8 +77,12 @@ export class ChatsComponent implements OnChanges, OnInit {
     });
   }
 
-  selectedChatId?: string;
+  selectedChatId?: string | null;
   onChatClick(chatId: string) {
     this.selectedChatId = chatId;
+  }
+
+  resetChatComponent() {
+    this.chatStateService.resetMessages();
   }
 }

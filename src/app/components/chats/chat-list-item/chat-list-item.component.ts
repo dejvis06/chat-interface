@@ -2,8 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ChatListItem } from '../chats.component';
 import { CommonModule } from '@angular/common';
 import { TimeAgoPipe } from '../../../pipes/time-ago.pipe';
-import { ChatDto, ChatMessageDto } from '../../chat/chat.component';
-import { HttpUserEvent } from '@angular/common/http';
+import { ChatDto } from '../../chat/chat.component';
 import { ChatService } from '../../../../services/chat-service/chat-service';
 import { ChatStateService } from '../../../../services/chat-state-service';
 
@@ -16,7 +15,7 @@ import { ChatStateService } from '../../../../services/chat-state-service';
 export class ChatListItemComponent {
   @Input() chat!: ChatListItem;
 
-  @Input() selectedChatId?: string; // receives the selected chat id
+  @Input() selectedChatId?: string | null; // receives the selected chat id
   @Output() chatClicked = new EventEmitter<string>();
 
   constructor(
@@ -29,8 +28,6 @@ export class ChatListItemComponent {
 
     this.chatService.getMessages(chatId).subscribe({
       next: (messages) => {
-        console.log(`Messages for chat ${chatId}:`, messages);
-
         const chatDto: ChatDto = {
           id: this.chat.id,
           name: this.chat.name,

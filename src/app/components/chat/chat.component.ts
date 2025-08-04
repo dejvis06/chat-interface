@@ -12,7 +12,6 @@ import { AiResponseComponent } from './ai-response/ai-response.component';
 import { UserPromptComponent } from './user-prompt/user-prompt.component';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 import { ChatService } from '../../../services/chat-service/chat-service';
 import { ChatStateService } from '../../../services/chat-state-service';
 
@@ -40,7 +39,7 @@ export interface ChatMessageDto {
   styleUrls: ['./chat.component.scss'],
 })
 export class ChatComponent implements OnInit {
-  @Input() chatId?: String;
+  @Input() chatId?: String | null;
 
   userMessage: string = '';
   messages: ChatMessageDto[] = [];
@@ -49,16 +48,26 @@ export class ChatComponent implements OnInit {
 
   messageControl = new FormControl('');
 
-  @Output() chatCreated = new EventEmitter<ChatDto>();
-
   constructor(
     private chatService: ChatService,
     private ngZone: NgZone,
     private chatStateService: ChatStateService
   ) {}
 
+  /**
+   * Subscribes to chat state changes.
+   * - On new chat: disables typing effect, sets chatId and messages, and scrolls to bottom.
+   * - On reset: clears messages, resets input control, and clears chatId.
+   */
   ngOnInit(): void {
     this.chatStateService.messages$.subscribe((chatDto) => {
+      if (!chatDto) {
+        // Reset State
+        this.messages = [];
+        this.messageControl.reset();
+        this.chatId = null;
+        return;
+      }
       this.typingEffect = false;
       this.chatId = chatDto!.id;
       this.messages = chatDto!.messages;
@@ -66,6 +75,7 @@ export class ChatComponent implements OnInit {
     });
   }
 
+  @Output() chatCreated = new EventEmitter<ChatDto>();
   sendMessage() {
     this.typingEffect = true;
 
