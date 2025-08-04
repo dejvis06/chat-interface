@@ -14,6 +14,7 @@ import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ChatService } from '../../../services/chat-service/chat-service';
 import { ChatStateService } from '../../../services/chat-state-service';
+import { take } from 'rxjs';
 
 export interface ChatDto {
   id: string;
@@ -71,7 +72,9 @@ export class ChatComponent implements OnInit {
       this.typingEffect = false;
       this.chatId = chatDto!.id;
       this.messages = chatDto!.messages;
-      this.scrollToBottom();
+      this.ngZone.onStable.pipe(take(1)).subscribe(() => {
+        this.scrollToBottom();
+      });
     });
   }
 
