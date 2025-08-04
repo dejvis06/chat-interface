@@ -1,5 +1,5 @@
 <div class="chat-container">
-  <ul #messagesList #bottomSentinel class="list-unstyled text-white messages">
+  <ul #messagesList class="list-unstyled text-white messages">
     <ng-container *ngFor="let msg of messages">
       <app-user-prompt *ngIf="msg.role === 'user'" [message]="msg.content" />
       <app-ai-response
