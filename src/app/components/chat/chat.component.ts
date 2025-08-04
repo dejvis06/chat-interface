@@ -71,7 +71,7 @@ export class ChatComponent implements OnInit {
       }
       this.typingEffect = false;
       this.chatId = chatDto!.id;
-      this.messages = chatDto!.messages;
+      this.messages = [...chatDto.messages].reverse();
       this.ngZone.onStable.pipe(take(1)).subscribe(() => {
         this.scrollToBottom();
       });
