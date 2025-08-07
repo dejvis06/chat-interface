@@ -143,35 +143,39 @@ export class ChatComponent implements OnInit {
     }
   }
 
-  currentPage = 0; // starts at latest page (1 = newest, 2 = older, etc.)
-  pageSize = 10;
-  loadingOlder = false;
   onScroll(): void {
     const el = this.messagesList.nativeElement;
-    if (el.scrollTop === 0 && !this.loadingOlder) {
+    if (el.scrollTop === 0) {
       this.loadOlderMessages();
     }
   }
 
+  currentPage = 0;
+  pageSize = 6;
+  loadingOlder = true;
   loadOlderMessages(): void {
-    this.loadingOlder = true;
+    console.log('load more: ', this.loadingOlder);
+    if (!this.loadingOlder) {
+      return;
+    }
     this.currentPage += 1;
 
     this.chatService
       .getMessages(this.chatId!, this.currentPage, this.pageSize)
       .subscribe((olderMessages) => {
         console.log(olderMessages);
+        if (olderMessages.length === 0) {
+          this.loadingOlder = false;
+        }
         // Save current scroll position
         const el = this.messagesList.nativeElement;
         const previousHeight = el.scrollHeight;
 
-        // Prepend messages as-is (no reverse)
-        this.messages = [...olderMessages, ...this.messages];
+        this.messages = [...olderMessages.reverse(), ...this.messages];
 
         this.ngZone.onStable.pipe(take(1)).subscribe(() => {
           const newHeight = el.scrollHeight;
           el.scrollTop = newHeight - previousHeight;
-          this.loadingOlder = false;
         });
       });
   }
@@ -180,8 +184,10 @@ export class ChatComponent implements OnInit {
     this.messages = [];
     this.messageControl.reset();
     this.chatId = null;
+
+    // Pagination
     this.currentPage = 0;
-    this.pageSize = 10;
-    this.loadingOlder = false;
+    this.pageSize = 6;
+    this.loadingOlder = true;
   }
 }

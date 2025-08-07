@@ -29,7 +29,7 @@ export class ChatService {
   public getMessages(
     chatId: string,
     page: number = 0,
-    size: number = 10
+    size: number = 6
   ): Observable<any> {
     return this.http.get<ChatMessageDto>(
       `${CHATS_ENDPOINT}/${chatId}/messages?page=${page}&size=${size}`
