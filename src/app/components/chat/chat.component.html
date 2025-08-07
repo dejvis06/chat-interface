@@ -1,5 +1,9 @@
 <div class="chat-container">
-  <ul #messagesList class="list-unstyled text-white messages">
+  <ul
+    #messagesList
+    class="list-unstyled text-white messages"
+    (scroll)="onScroll()"
+  >
     <ng-container *ngFor="let msg of messages">
       <app-user-prompt *ngIf="msg.role === 'user'" [message]="msg.content" />
       <app-ai-response

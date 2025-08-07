@@ -40,7 +40,7 @@ export interface ChatMessageDto {
   styleUrls: ['./chat.component.scss'],
 })
 export class ChatComponent implements OnInit {
-  @Input() chatId?: String | null;
+  @Input() chatId?: string | null;
 
   userMessage: string = '';
   messages: ChatMessageDto[] = [];
@@ -58,15 +58,12 @@ export class ChatComponent implements OnInit {
   /**
    * Subscribes to chat state changes.
    * - On new chat: disables typing effect, sets chatId and messages, and scrolls to bottom.
-   * - On reset: clears messages, resets input control, and clears chatId.
+   * - On chat selected: clears component state
    */
   ngOnInit(): void {
-    this.chatStateService.messages$.subscribe((chatDto) => {
+    this.chatStateService.chat$.subscribe((chatDto) => {
       if (!chatDto) {
-        // Reset State
-        this.messages = [];
-        this.messageControl.reset();
-        this.chatId = null;
+        this.resetState();
         return;
       }
       this.typingEffect = false;
@@ -144,5 +141,47 @@ export class ChatComponent implements OnInit {
     } catch (err) {
       console.error('Scroll failed', err);
     }
+  }
+
+  currentPage = 0; // starts at latest page (1 = newest, 2 = older, etc.)
+  pageSize = 10;
+  loadingOlder = false;
+  onScroll(): void {
+    const el = this.messagesList.nativeElement;
+    if (el.scrollTop === 0 && !this.loadingOlder) {
+      this.loadOlderMessages();
+    }
+  }
+
+  loadOlderMessages(): void {
+    this.loadingOlder = true;
+    this.currentPage += 1;
+
+    this.chatService
+      .getMessages(this.chatId!, this.currentPage, this.pageSize)
+      .subscribe((olderMessages) => {
+        console.log(olderMessages);
+        // Save current scroll position
+        const el = this.messagesList.nativeElement;
+        const previousHeight = el.scrollHeight;
+
+        // Prepend messages as-is (no reverse)
+        this.messages = [...olderMessages, ...this.messages];
+
+        this.ngZone.onStable.pipe(take(1)).subscribe(() => {
+          const newHeight = el.scrollHeight;
+          el.scrollTop = newHeight - previousHeight;
+          this.loadingOlder = false;
+        });
+      });
+  }
+
+  private resetState() {
+    this.messages = [];
+    this.messageControl.reset();
+    this.chatId = null;
+    this.currentPage = 0;
+    this.pageSize = 10;
+    this.loadingOlder = false;
   }
 }

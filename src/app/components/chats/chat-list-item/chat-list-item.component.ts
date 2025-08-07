@@ -34,7 +34,7 @@ export class ChatListItemComponent {
           messages: messages,
           createdAt: this.chat.createdAt,
         };
-        this.chatStateService.setMessages(chatDto);
+        this.chatStateService.setChat(chatDto);
       },
       error: (err) => {
         console.error('Error loading messages', err);

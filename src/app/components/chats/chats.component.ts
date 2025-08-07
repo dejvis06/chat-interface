@@ -54,7 +54,7 @@ export class ChatsComponent implements OnChanges, OnInit {
       };
       this.chats.unshift(chatListItem);
     }
-    this.chatStateService.messages$.subscribe((chatDto) => {
+    this.chatStateService.chat$.subscribe((chatDto) => {
       if (!chatDto) {
         // Reset selected chat
         this.selectedChatId = null;
@@ -83,6 +83,6 @@ export class ChatsComponent implements OnChanges, OnInit {
   }
 
   resetChatComponent() {
-    this.chatStateService.resetMessages();
+    this.chatStateService.resetChat();
   }
 }
