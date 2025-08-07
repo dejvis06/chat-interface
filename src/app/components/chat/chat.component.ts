@@ -154,7 +154,6 @@ export class ChatComponent implements OnInit {
   pageSize = 6;
   loadingOlder = true;
   loadOlderMessages(): void {
-    console.log('load more: ', this.loadingOlder);
     if (!this.loadingOlder) {
       return;
     }
@@ -163,7 +162,6 @@ export class ChatComponent implements OnInit {
     this.chatService
       .getMessages(this.chatId!, this.currentPage, this.pageSize)
       .subscribe((olderMessages) => {
-        console.log(olderMessages);
         if (olderMessages.length === 0) {
           this.loadingOlder = false;
         }
