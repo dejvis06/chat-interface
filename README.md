@@ -10,5 +10,5 @@ The app provides an interactive chat interface for managing conversations with A
 - **Message Input Box** – Text area to type messages to the AI.
 - **Send Button** – Sends the typed message to the active chat.
 
-<img src="chat-interface.png" alt="Chat Interface" style="width:55%;">
+<img src="chat-interface.png" alt="Chat Interface" style="width:70%;">
 
